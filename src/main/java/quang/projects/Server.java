@@ -31,4 +31,18 @@ public class Server {
     public static void removeClient(ClientHandler clientHandler) {
         clients.remove(clientHandler);
     }
+
+    public static void directMessage(String recipient, String message) {
+
+        for (ClientHandler client : clients) {
+
+            if (client.getClientName().equalsIgnoreCase(recipient)) {
+
+                client.sendMessage(message);
+                return;
+            }
+        }
+
+        System.out.println("User not found");
+    }
 }

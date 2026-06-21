@@ -26,9 +26,26 @@ public class ClientHandler implements Runnable {
             while (true) {
                 String message = dis.readUTF();
 
-                System.out.println(clientName + ": " + message);
+                if (message.trim().startsWith("/dm")) {
 
-                Server.broadcast(clientName + ": " + message);
+                    String[] parts = message.split(" ", 3);
+
+                    if (parts.length < 3) {
+                        sendMessage("Usage: /dm <user> <message>");
+                    }
+                    else {
+                        String recipient = parts[1];
+                        String dm = parts[2];
+
+                        Server.directMessage(
+                                recipient,
+                                "[DM from " + clientName + "]: " + dm
+                        );
+                    }
+
+                } else {
+                    Server.broadcast(clientName + ": " + message);
+                }
             }
         } catch (IOException e) {
             System.out.println(clientName + " disconnected");
@@ -59,4 +76,9 @@ public class ClientHandler implements Runnable {
             e.printStackTrace();
         }
     }
+
+    public String getClientName() {
+        return clientName;
+    }
+
 }
